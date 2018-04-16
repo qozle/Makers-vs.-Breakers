@@ -1,5 +1,6 @@
 import sys, pygame, time
 from pathlib import Path as path
+from random import *
 
 pygame.init()
 
@@ -11,32 +12,42 @@ screen = pygame.display.set_mode(size, pygame.RESIZABLE)
 
 makers = pygame.sprite.Group()
 
-maker1 = pygame.sprite.Sprite(makers)
-maker1.image = pygame.image.load('maker.png')
-maker1.rect = maker1.image.get_rect()
-maker1.speed = [1,1]
+class Maker(pygame.sprite.Sprite):
 
-maker2 = pygame.sprite.Sprite(makers)
-maker2.image = pygame.image.load('maker.png')
-maker2.rect = maker2.image.get_rect()
-maker2.rect.left, maker2.rect.top = 50,50
-maker2.speed = [-1,1]
+    def __init__(self, *groups, **kwargs):
+        super().__init__(*groups)
+        self.image = pygame.image.load('maker.png')
+        self.rect = self.image.get_rect()
+        self.speed = [randint(1,3),randint(1,3)]
+        self.rect.topleft = (randint(0,480),randint(0,480))
 
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
+maker1 = Maker(makers)
+maker2 = Maker(makers)
+maker3 = Maker(makers)
+maker4 = Maker(makers)
+
+maker_num = 4    
 
 while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
 
-    for item in makers.sprites():
-        if item.rect.left < 0 or item.rect.right > width:
-            item.speed[0] = -item.speed[0]
-        if item.rect.top < 0 or item.rect.bottom > height:
-            item.speed[1] = -item.speed[1]
-        item.rect = item.rect.move(item.speed)
+    for sprite in makers.sprites():
+        if sprite.rect.left < 0 or sprite.rect.right > width:
+            sprite.speed[0] = -sprite.speed[0]
+        if sprite.rect.top < 0 or sprite.rect.bottom > height:
+            sprite.speed[1] = -sprite.speed[1]
+        for item in pygame.sprite.spritecollide(sprite, makers, False, pygame.sprite.collide_circle):
+            item.speed[0], item.speed[1] = -item.speed[0], -item.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
+    
+        sprite.rect = sprite.rect.move(sprite.speed)
         
    
     screen.fill(color)
     makers.draw(screen)
     pygame.display.flip()
-    time.sleep(.005)
+    time.sleep(.01)
