@@ -21,7 +21,7 @@ class Maker(pygame.sprite.Sprite):
         self.image = pygame.image.load('maker.png')
         self.rect = self.image.get_rect()
         self.speed = [choice([-1, 1]),choice([-1, 1])]
-        self.rect.topleft = (randint(0,480),randint(0,480))
+        self.rect.topleft = (randint(0,750),randint(0,750))
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -34,7 +34,7 @@ class Breaker(pygame.sprite.Sprite):
         self.image = pygame.image.load('breaker.png')
         self.rect = self.image.get_rect()
         self.speed = [choice([-1, 1]),choice([-1, 1])]
-        self.rect.topleft = (randint(0,480), randint(0,480))
+        self.rect.topleft = (randint(0,750), randint(0,750))
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -47,7 +47,7 @@ class Neuter(pygame.sprite.Sprite):
         self.image = pygame.image.load('neuter.png')
         self.rect = self.image.get_rect()
         self.speed = [choice([-1, 1]),choice([-1, 1])]
-        self.rect.topleft = (randint(0,480), randint(0,480))
+        self.rect.topleft = (randint(0,750), randint(0,750))
 
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -57,6 +57,7 @@ maker1 = Maker(makers)
 maker2 = Maker(makers)
 maker3 = Maker(makers)
 maker4 = Maker(makers)
+maker5 = Maker(makers)
 
 breaker = Breaker(breakers)
 
@@ -83,14 +84,14 @@ while 1:
         ## If a maker hits a maker, both change direction, make a new neuter
         for hitsprite in pygame.sprite.spritecollide(sprite, makers, False, pygame.sprite.collide_circle):
             hitsprite.speed[0], hitsprite.speed[1] = -hitsprite.speed[0], -hitsprite.speed[1]
-            sprite.speed[0], sprite.speed[1] = -sprite.speed[1], -sprite.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
             sprite.rect = sprite.rect.move(sprite.speed)
             hitsprite.rect = hitsprite.rect.move(hitsprite.speed)
             neuters.add(Neuter(neuters))
         ## If a maker hits a neuter, both change direction
         for hitsprite in pygame.sprite.spritecollide(sprite, neuters, False, pygame.sprite.collide_circle):
             hitsprite.speed[0], hitsprite.speed[1] = -hitsprite.speed[0], -hitsprite.speed[1]
-            sprite.speed[0], sprite.speed[1] = -sprite.speed[1], -sprite.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
             sprite.rect = sprite.rect.move(sprite.speed)
             hitsprite.rect = hitsprite.rect.move(hitsprite.speed)
         ## If a maker hits a breaker
@@ -121,12 +122,12 @@ while 1:
         ## If a breaker hits a breaker
         for hitsprite in pygame.sprite.spritecollide(sprite, breakers, False, pygame.sprite.collide_circle):
             hitsprite.speed[0], hitsprite.speed[1] = -hitsprite.speed[0], -hitsprite.speed[1]
-            sprite.speed[0], sprite.speed[1] = -sprite.speed[1], -sprite.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
             sprite.rect = sprite.rect.move(sprite.speed)
             hitsprite.rect = hitsprite.rect.move(hitsprite.speed)
         ## If a breaker hits a neuter
         for hitsprite in pygame.sprite.spritecollide(sprite, neuters, True, pygame.sprite.collide_circle):
-            sprite.speed[0], sprite.speed[1] = -sprite.speed[1], -sprite.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
             sprite.rect = sprite.rect.move(sprite.speed)
 
         breakers.add(sprite)
@@ -148,7 +149,7 @@ while 1:
         ## If a neuter hits a neuter
         for hitsprite in pygame.sprite.spritecollide(sprite, neuters, False, pygame.sprite.collide_circle):
             hitsprite.speed[0], hitsprite.speed[1] = -hitsprite.speed[0], -hitsprite.speed[1]
-            sprite.speed[0], sprite.speed[1] = -sprite.speed[1], -sprite.speed[1]
+            sprite.speed[0], sprite.speed[1] = -sprite.speed[0], -sprite.speed[1]
             sprite.rect = sprite.rect.move(sprite.speed)
 
         neuters.add(sprite)
@@ -156,7 +157,7 @@ while 1:
         sprite.rect = sprite.rect.move(sprite.speed)
     
 
-    if len(neuters) > 15:
+    if len(neuters) > 20:
         neuters.empty()
         
 
@@ -164,5 +165,5 @@ while 1:
     makers.draw(screen)
     breakers.draw(screen)
     neuters.draw(screen)
-    time.sleep(.005)
+    time.sleep(.002)
     pygame.display.flip()
