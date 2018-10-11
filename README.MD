@@ -1,1 +1,1 @@
-This is basically done.  I'm happy with how it works.  
+Just a simple thing I felt like making for the sake of learning and curiosity.
